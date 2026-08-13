@@ -1,5 +1,9 @@
 python = venv/bin/python
 pip = venv/bin/pip
+IMAGE_NAME = my_fastapi
+BUILDER = paketobuildpacks/builder:base
+
+.PHONY: setup run mlflow test clean remove build-image run-image
 
 setup:
 	python3 -m venv venv
@@ -14,7 +18,15 @@ mlflow:
 
 test:
 	$(python) -m pytest
-		
+
+# --- Buildpacks & Container Commands ---
+
+build-image:
+	pack build $(IMAGE_NAME) --builder $(BUILDER) --clear-cache
+
+run-image:
+	docker run -p 80:80 $(IMAGE_NAME)
+
 clean:
 	rm -rf steps/__pycache__
 	rm -rf __pycache__
