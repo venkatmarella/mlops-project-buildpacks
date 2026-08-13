@@ -56,7 +56,7 @@ Start the FastAPI application by running:
 uvicorn app:app --reload
 ```
 
-#### 6. Docker
+<!-- #### 6. Docker
 To build the Docker image and run the container:
 
 ```bash
@@ -65,7 +65,29 @@ docker build -t my_fastapi .
 ```bash
 docker run -p 80:80 my_fastapi
 ```
-Once your Docker image is built, you can push it to Docker Hub, making it accessible for deployment on any cloud platform.
+Once your Docker image is built, you can push it to Docker Hub, making it accessible for deployment on any cloud platform. -->
+
+#### 6. BuildPacks
+To build the image with buildpacks(you still need docker runtime installed)
+
+```bash
+brew tap buildpacks/tap
+
+brew trust buildpacks/tap
+
+brew install pack
+
+pack builder suggest
+
+cd mlops-project-buildpacks
+
+vi Procfile —> web: uvicorn app:app --host 0.0.0.0 --port 80
+
+pack build my_fastapi --builder paketobuildpacks/builder-jammy-base
+
+docker run -p 80:80 my_fastapi:latest
+```
+
 #### 7. Monitor the Model
 Integrate Evidently AI to monitor the model for data drift and performance degradation:
 
